@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 15:31:22 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/01/26 20:26:31 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/01/27 19:59:53 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,28 @@ static void	init_cmd(t_cmd *c, int fd)
 	c->args[0] = 0;
 }
 
-static char	**get_path(char **ep)
+static char	**get_path(char **envp)
 {
-	char	**ret;
-	char	*env;
+	char	**my_path;
+	char	*env_path;
 	int		i;
 
 	i = -1;
-	while (ep[++i])
+	while (envp[++i])
 	{
-		if (!ft_strncmp(ep[i], "PATH=", PATH))
+		if (!ft_strncmp(envp[i], "PATH=", PATH))
 		{
-			env = ft_substr(ep[i], START, ft_strlen(ep[i]));
-			if (!env)
+			env_path = ft_substr(envp[i], START, ft_strlen(envp[i]));
+			if (!env_path)
 				return (NULL);
-			ret = ft_splitpath(env, ':');
-			if (!ret)
+			my_path = ft_splitpath(env_path, ':');
+			if (!my_path)
 			{
-				free(env);
+				free(env_path);
 				return (NULL);
 			}
-			free (env);
-			return (ret);
+			free (env_path);
+			return (my_path);
 		}
 	}
 	return (NULL);
