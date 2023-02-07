@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 17:34:21 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/01/27 12:08:20 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/07 14:24:20 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ typedef struct s_cmd
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t	ft_strlen(const char *str);
+char	*ft_substr(const char *s, unsigned int start, size_t len);
 int		ft_putstr(char *s, char *t);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strdup(const char *str);
+char	*ft_strjoin(char *dst, const char *src);
 
 /* Free */
 
@@ -49,19 +49,16 @@ void	error_cmd_msg(char *c);
 
 /* pipex_utils */
 
-void	exec_cmd(t_cmd *cmd1, t_cmd *cmd2, char **envp);
+int		check_empty(char *s);
 int		check_cmd(t_cmd *c);
+void	exec_cmd(t_cmd *cmd1, t_cmd *cmd2, char **envp);
 
 /* split_path */
 
 char	**ft_splitpath(char *s, char c);
 
-/* pipex */
-
-void	pipex(int fd1, int fd2, char **av, char **envp);
-
 /* Main */
 
-int		check_empty(char *s);
+void	pipex(int fd1, int fd2, char **av, char **envp);
 
 #endif

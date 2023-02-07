@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Utils.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 17:40:40 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/01/27 12:06:53 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/07 16:37:48 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ size_t	ft_strlen(const char *str)
 	size_t	i;
 
 	i = 0;
-	while (str)
+	while (str && str[i])
 		i++;
 	return (i);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(const char *s, unsigned int start, size_t len)
 {
 	size_t	i;
 	char	*str;
@@ -68,24 +68,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (str);
 }
 
-char	*ft_strdup(const char *str)
-{
-	size_t	i;
-	char	*dup;
-
-	dup = malloc(sizeof(char) * ft_strlen(str) + 1);
-	i = 0;
-	if (!dup)
-		return (NULL);
-	while (i < ft_strlen(str))
-	{
-		dup[i] = str[i];
-		i++;
-	}
-	dup[i] = '\0';
-	return (dup);
-}
-
 int	ft_putstr(char *s, char *t)
 {
 	if (!s)
@@ -103,4 +85,31 @@ int	ft_putstr(char *s, char *t)
 	}
 	write(2, "\n", 1);
 	return (2);
+}
+
+char	*ft_strjoin(char *s1, const char *s2)
+{
+	size_t	i;
+	size_t	j;
+	char	*str;
+
+	if (!s1 || !s2)
+		return (NULL);
+	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!str)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	str[i + j] = '\0';
+	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 15:31:22 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/01/26 15:33:13 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/07 15:37:47 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char	**free_tab(char **tab)
 
 	i = 0;
 	while (tab && tab[i])
-		free(tab);
+		free(tab[i++]);
 	if (tab)
 		free(tab);
 	return (0);
@@ -35,7 +35,7 @@ static int	nb_words(const char *s, char c)
 	count = 0;
 	while (s[++i])
 	{
-		if ((s[i] != c && s[i + 1] == c) && (s[i] != c && s[i + 1] == '\0'))
+		if ((s[i] != c && s[i + 1] == c) || (s[i] != c && s[i + 1] == '\0'))
 			count++;
 	}
 	return (count);
@@ -45,9 +45,6 @@ static int	words_len(const char *s, char c, int i)
 {
 	int	len;
 
-	if (!s || !s[0])
-		return (0);
-	i = -1;
 	len = 0;
 	while (s && s[i] && s[i] == c)
 		i++;
