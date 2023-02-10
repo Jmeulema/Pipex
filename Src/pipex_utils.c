@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 15:31:22 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/02/07 16:46:35 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/10 11:34:04 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,23 @@ int	check_empty(char *s)
 int	check_cmd(t_cmd *c)
 {
 	int		i;
-	char	*cmd;
 
 	i = -1;
+	if (access(c->cmd, X_OK) == 0)
+	{
+		c->cmd_path = c->cmd;
+		return (1);
+	}
 	while (c->path[++i])
 	{
-		cmd = ft_strjoin(c->path[i], c->cmd);
-		if (!cmd)
+		c->cmd_path = ft_strjoin(c->path[i], c->cmd);
+		if (!c->cmd_path)
 			return (0);
-		if (access(cmd, X_OK) != -1)
+		if (access(c->cmd_path, X_OK) != -1)
 		{
-			free(cmd);
 			return (1);
 		}
-		free(cmd);
+		free(c->cmd_path);
 	}
 	error_cmd_msg(c->cmd);
 	return (0);
@@ -51,49 +54,25 @@ int	check_cmd(t_cmd *c)
 static void	child_one(int *pipefd, t_cmd *c, char **envp)
 {
 	int		i;
-	char	*cmd;
 
 	i = -1;
 	if (dup2(c->fd, STDIN_FILENO) < 0 || dup2(pipefd[1], STDOUT_FILENO) < 0)
 		return (perror("Child One"));
 	close(pipefd[0]);
-	while (c->path[++i])
-	{
-		cmd = ft_strjoin(c->path[i], c->cmd);
-		if (!cmd)
-			return ;
-		if (execve(cmd, c->args, envp) != -1)
-		{
-			free(cmd);
-			exit(EXIT_SUCCESS);
-		}
-		free(cmd);
-	}
-	exit(EXIT_FAILURE);
+	if (execve(c->cmd_path, c->args, envp))
+		ft_putstr(strerror(errno), 0);
 }
 
 static void	child_two(int *pipefd, t_cmd *c, char **envp)
 {
 	int		i;
-	char	*cmd;
 
 	i = -1;
 	if (dup2(c->fd, STDOUT_FILENO) < 0 || dup2(pipefd[0], STDIN_FILENO) < 0)
 		return (perror("Child Two"));
 	close(pipefd[1]);
-	while (c->path[++i])
-	{
-		cmd = ft_strjoin(c->path[i], c->cmd);
-		if (!cmd)
-			return ;
-		if (execve(cmd, c->args, envp) != -1)
-		{
-			free(cmd);
-			exit(EXIT_SUCCESS);
-		}
-		free(cmd);
-	}
-	exit(EXIT_FAILURE);
+	if (execve(c->cmd_path, c->args, envp) == -1)
+		ft_putstr(strerror(errno), 0);
 }
 
 void	exec_cmd(t_cmd *cmd1, t_cmd *cmd2, char **envp)

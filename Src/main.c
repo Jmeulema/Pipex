@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 15:31:22 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/02/07 15:44:07 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/10 11:59:20 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,25 @@ void	pipex(int fd1, int fd2, char **av, char **envp)
 {
 	t_cmd	cmd1;
 	t_cmd	cmd2;
+	int		error;
 
+	error = 0;
 	init_cmd(&cmd1, fd1);
 	init_cmd(&cmd2, fd2);
 	if (!get_cmd(envp, &cmd1, av[2]) || !get_cmd(envp, &cmd2, av[3]))
-		return (free_all(&cmd1, &cmd2));
-	if (!check_cmd(&cmd1) || !check_cmd(&cmd2))
-		return (free_all(&cmd1, &cmd2));
+	{
+		free_all(&cmd1, &cmd2);
+		exit(EXIT_FAILURE);
+	}
+	if (!check_cmd(&cmd2))
+		error++;
+	if (!check_cmd(&cmd1))
+		error++;
+	if (error > 0)
+	{
+		free_all(&cmd1, &cmd2);
+		exit(EXIT_FAILURE);
+	}	
 	exec_cmd(&cmd1, &cmd2, envp);
 	free_struct(&cmd1);
 	free_struct(&cmd2);
