@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 15:31:22 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/02/10 15:54:37 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/14 16:04:01 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void	init_cmd(t_cmd *c, int fd)
 	c->path = NULL;
 	c->cmd = NULL;
 	c->cmd_path = NULL;
+	c->cmd_access = NULL;
 	c->args[0] = NULL;
 }
 
@@ -98,16 +99,9 @@ void	pipex(int fd1, int fd2, char **av, char **envp)
 	if (!check_cmd(&cmd2))
 		error++;
 	if (error > 0)
-	{
-		free_all(&cmd1, &cmd2);
 		exit(EXIT_FAILURE);
-	}
 	exec_cmd(&cmd1, &cmd2, envp);
-	printf("ok%s\n", cmd1.cmd_path);
-	printf("ok%s\n", cmd2.cmd_path);
 	free_all(&cmd1, &cmd2);
-	printf("free%s\n", cmd1.cmd_path);
-	printf("free%s\n", cmd2.cmd_path);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -128,6 +122,5 @@ int	main(int ac, char **av, char **envp)
 	pipex(fd1, fd2, av, envp);
 	if (close(fd1) < 0 || close(fd2) < 0)
 		return (ft_putstr(strerror(errno), 0));
-	system ("leaks pipex");
 	return (0);
 }
