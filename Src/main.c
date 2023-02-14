@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 15:31:22 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/02/10 11:59:20 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/10 15:54:37 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 static void	init_cmd(t_cmd *c, int fd)
 {
 	c->fd = fd;
-	c->path = 0;
-	c->cmd = 0;
-	c->args[0] = 0;
+	c->path = NULL;
+	c->cmd = NULL;
+	c->cmd_path = NULL;
+	c->args[0] = NULL;
 }
 
 static char	**get_path(char **envp)
@@ -37,7 +38,7 @@ static char	**get_path(char **envp)
 			my_path = ft_splitpath(env_path, ':');
 			if (!my_path)
 			{
-				free(env_path);
+				free (env_path);
 				return (NULL);
 			}
 			free (env_path);
@@ -90,18 +91,23 @@ void	pipex(int fd1, int fd2, char **av, char **envp)
 		free_all(&cmd1, &cmd2);
 		exit(EXIT_FAILURE);
 	}
-	if (!check_cmd(&cmd2))
-		error++;
 	if (!check_cmd(&cmd1))
+	{
+		error++;
+	}
+	if (!check_cmd(&cmd2))
 		error++;
 	if (error > 0)
 	{
 		free_all(&cmd1, &cmd2);
 		exit(EXIT_FAILURE);
-	}	
+	}
 	exec_cmd(&cmd1, &cmd2, envp);
-	free_struct(&cmd1);
-	free_struct(&cmd2);
+	printf("ok%s\n", cmd1.cmd_path);
+	printf("ok%s\n", cmd2.cmd_path);
+	free_all(&cmd1, &cmd2);
+	printf("free%s\n", cmd1.cmd_path);
+	printf("free%s\n", cmd2.cmd_path);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -122,5 +128,6 @@ int	main(int ac, char **av, char **envp)
 	pipex(fd1, fd2, av, envp);
 	if (close(fd1) < 0 || close(fd2) < 0)
 		return (ft_putstr(strerror(errno), 0));
+	system ("leaks pipex");
 	return (0);
 }

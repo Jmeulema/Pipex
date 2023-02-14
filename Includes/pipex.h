@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 17:34:21 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/02/10 12:01:57 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/10 15:44:44 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ char	*ft_strjoin(char *dst, const char *src);
 /* Free */
 
 int		free_arr(char **path);
+// void	free_cmd_path(t_cmd *c);
 void	free_struct(t_cmd *c);
 void	free_all(t_cmd *a, t_cmd *b);
 void	error_cmd_msg(char *c);

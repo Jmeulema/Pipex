@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 15:31:22 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/02/10 11:34:04 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/10 15:27:52 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	check_empty(char *s)
 		if (s[i] != ' ')
 			return (0);
 	}
-	(ft_putstr("Empty command", 0));
+	ft_putstr("Empty command", 0);
 	return (1);
 }
 
