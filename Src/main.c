@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 15:31:22 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/02/14 16:23:24 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/14 16:30:07 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void	init_cmd(t_cmd *c, int fd)
 	c->path = NULL;
 	c->cmd = NULL;
 	c->cmd_path = NULL;
+	c->cmd_access = NULL;
 	c->args[0] = NULL;
 }
 

@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 16:21:18 by jmeulema          #+#    #+#             */
-/*   Updated: 2023/02/14 16:21:47 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/14 16:28:39 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	free_struct(t_cmd *c)
 		free (c->cmd_path);
 	if (c->path)
 		free_arr(c->path);
-	free_arr(c->path);
 	while (c->args[i])
 		free (c->args[i++]);
 }
