@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/30 15:31:22 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/02/10 15:27:52 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:19:14 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	check_cmd(t_cmd *c)
 	i = -1;
 	if (access(c->cmd, X_OK) == 0)
 	{
-		c->cmd_path = c->cmd;
+		c->cmd_access = c->cmd;
 		return (1);
 	}
 	while (c->path[++i])
@@ -59,8 +59,16 @@ static void	child_one(int *pipefd, t_cmd *c, char **envp)
 	if (dup2(c->fd, STDIN_FILENO) < 0 || dup2(pipefd[1], STDOUT_FILENO) < 0)
 		return (perror("Child One"));
 	close(pipefd[0]);
-	if (execve(c->cmd_path, c->args, envp))
-		ft_putstr(strerror(errno), 0);
+	if (c->cmd_path)
+	{
+		if (execve(c->cmd_path, c->args, envp))
+			ft_putstr(strerror(errno), 0);
+	}
+	else
+	{
+		if (execve(c->cmd_access, c->args, envp))
+			ft_putstr(strerror(errno), 0);
+	}
 }
 
 static void	child_two(int *pipefd, t_cmd *c, char **envp)
@@ -71,8 +79,16 @@ static void	child_two(int *pipefd, t_cmd *c, char **envp)
 	if (dup2(c->fd, STDOUT_FILENO) < 0 || dup2(pipefd[0], STDIN_FILENO) < 0)
 		return (perror("Child Two"));
 	close(pipefd[1]);
-	if (execve(c->cmd_path, c->args, envp) == -1)
-		ft_putstr(strerror(errno), 0);
+	if (c->cmd_path)
+	{
+		if (execve(c->cmd_path, c->args, envp) == -1)
+			ft_putstr(strerror(errno), 0);
+	}
+	else
+	{
+		if (execve(c->cmd_access, c->args, envp) == -1)
+			ft_putstr(strerror(errno), 0);
+	}
 }
 
 void	exec_cmd(t_cmd *cmd1, t_cmd *cmd2, char **envp)

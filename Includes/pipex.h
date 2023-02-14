@@ -6,7 +6,7 @@
 /*   By: jmeulema <jmeulema@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 17:34:21 by mlazzare          #+#    #+#             */
-/*   Updated: 2023/02/10 15:44:44 by jmeulema         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:12:36 by jmeulema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_cmd
 	char	*cmd;
 	char	**path;
 	char	*cmd_path;
+	char	*cmd_access;
 	char	*args[100];
 	int		fd;
 }	t_cmd;
